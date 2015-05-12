@@ -17,11 +17,22 @@ hibernate {
 // environment specific settings
 environments {
     development {
-        dataSource {
+//        dataSource {
+//            dbCreate = "update"
+//            url = "jdbc:postgresql://localhost:5432/sgt"
+//            username = "postgres"
+//            password = "admin"
+//        }
+dataSource {
             dbCreate = "update"
-            url = "jdbc:postgresql://localhost:5432/sgt"
-            username = "postgres"
-            password = "admin"
+            driverClassName = "org.postgresql.Driver"
+            dialect = org.hibernate.dialect.PostgreSQLDialect
+
+            uri = new URI(System.env.DATABASE_URL?:"postgres://test:test@localhost/test")
+
+            url = "jdbc:postgresql://" + uri.host + ":" + uri.port + uri.path
+            username = uri.userInfo.split(":")[0]
+            password = uri.userInfo.split(":")[1]
         }
     }
     test {
